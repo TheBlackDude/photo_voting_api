@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework.authtoken',
     'account',
 ]
 
@@ -126,6 +128,26 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'public/static')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'public/media')
+
+# Rest Framework
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+    )
+}
+
+# We only add the corsheaders on development
+if DEBUG:
+    INSTALLED_APPS += [
+        'corsheaders'
+    ]
+    MIDDLEWARE += [
+        'corsheaders.middleware.CorsMiddleware',
+    ]
+    CORS_ORIGIN_ALLOW_ALL = True
 
 # Logging
 LOGGING = {

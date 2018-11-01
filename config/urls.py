@@ -14,8 +14,23 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.conf import settings
 from django.urls import path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 ]
+
+# Api url docs onlu available on development
+# and we only add midea url in development
+# once we deploy we'll use nginx to handle all static files
+if settings.DEBUG:
+    from django.conf.urls.static import static
+    from rest_framework.documentation import include_docs_urls
+
+    urlpatterns = [
+        path('api/v1/docs/', include_docs_urls()),
+    ] + urlpatterns
+
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)
