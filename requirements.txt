@@ -1,5 +1,7 @@
 # Django packages
 django==2.1.2
+djangorestframework==3.9.0
+django-cors-headers==2.2.0
 
 # Sql packages
 psycopg2==2.7.5

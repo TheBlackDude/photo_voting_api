@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  # Postgres container
+  db:
+    image: postgres:9.6
+    hostname: db
+    environment:
+      POSTGRES_USER: "${PG_USERNAME}"
+      POSTGRES_PASSWORD: "${PG_PASSWORD}"
+      POSTGRES_DB: "${PG_NAME}"
+
+  # voting container
+  voting:
+    build: .
+    volumes: &voting_volumes
+      - .:/code
+    ports:
+      - "8000:8000"
+    links: &voting_links
+      - db
+    depends_on:
+      - db
+    environment:
+      # Django variables
+      DEBUG: "${DEBUG}"
+      SECRET_KEY: "${SECRET_KEY}"
+      # Postgres variables
+      PG_NAME: "${PG_NAME}"
+      PG_USERNAME: "${PG_USERNAME}"
+      PG_PASSWORD: "${PG_PASSWORD}"
+      PG_HOST: db
+      PG_PORT: 5432
+    command: start_dev
