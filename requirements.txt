@@ -3,6 +3,7 @@ django==2.1.2
 djangorestframework==3.9.0
 django-cors-headers==2.2.0
 django-rest-auth==0.9.3
+Pillow==5.1.0
 
 # Sql packages
 psycopg2==2.7.5

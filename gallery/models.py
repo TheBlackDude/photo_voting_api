@@ -20,11 +20,18 @@ class Image(models.Model):
     description = models.CharField(max_length=255, blank=True)
     category = models.CharField(max_length=10,
                                 choices=CATEGORY_CHOICES, default='nature')
-    upvote = models.IntegerField(default=0)
-    downvote = models.IntegerField(default=0)
     # In a real application you should use GeoDjango for GeoLocations
     location = models.CharField(max_length=255, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
+
+
+class Vote(models.Model):
+    image = models.ForeignKey(Image, related_name='votes', on_delete=models.PROTECT)
+    upvote = models.IntegerField(default=0)
+    downvote = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.image
