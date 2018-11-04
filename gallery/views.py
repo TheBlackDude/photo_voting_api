@@ -1,8 +1,10 @@
+from django.http import Http404
 from rest_framework import permissions, viewsets, status, views
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
+from rest_framework.views import APIView
 from .models import Image
-from .serializers import ImageSerializer
+from .serializers import ImageInfoSerializer, ImageSerializer
 
 
 class ImageViewSet(viewsets.ModelViewSet):
@@ -10,13 +12,13 @@ class ImageViewSet(viewsets.ModelViewSet):
     API endpoint for creating and listing Images
     """
     queryset = Image.objects.order_by('-created_at')
-    serializer_class = ImageSerializer
+    serializer_class = ImageInfoSerializer
 
     def get_owner(self):
         # lookup user by their token and return True and the user
         # if token doesn't exist return False and None
         if self.request.META.get('HTTP_AUTHORIZATION'):
-            token_header = self.request.META.get('HTTP_AUTHORIZATION').split(' ')[1]
+            token_header = self.request.META.get('HTTP_AUTHORIZATION')
             try:
                 token = Token.objects.get(key=token_header)
             except (KeyError, Token.DoesNotExist):
@@ -44,10 +46,32 @@ class ImageViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             Image.objects.create(owner=self.get_owner()[1],
                                  **serializer.validated_data)
-            return Response({'msg': 'image added successfully'},
+            return Response({'msg': 'image info added successfully',
+                             'id': Image.objects.last().id},
                             status=status.HTTP_201_CREATED)
 
         return Response({
             'status': 'Bad request',
-            'message': 'Image could not be created with received data.'
+            'message': 'Image info could not be created with received data.'
             }, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ImageApiView(APIView):
+    """
+    Api endpoint for uploading image
+    """
+    def get_object(self, pk):
+        try:
+            return Image.objects.get(pk=pk)
+        except Image.DoesNotExist:
+            raise Http404
+
+    def put(self, request, pk):
+        image = self.get_object(pk)
+        serializer = ImageSerializer(
+            image, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors,
+                        status=status.HTTP_400_BAD_REQUEST)

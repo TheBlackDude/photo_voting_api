@@ -15,7 +15,8 @@ class Image(models.Model):
     )
     owner = models.ForeignKey(User,
                               related_name='images', on_delete=models.PROTECT)
-    image = models.ImageField(upload_to='Images/', default='Images/No-img.jpg')
+    image = models.ImageField(upload_to='Images/',
+                              default='Images/No-img.jpg', blank=True)
     title = models.CharField(max_length=50)
     description = models.CharField(max_length=255, blank=True)
     category = models.CharField(max_length=10,

@@ -1,10 +1,11 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import ImageViewSet
+from .views import ImageViewSet, ImageApiView
 
 router = DefaultRouter()
 router.register(r'images', ImageViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('image/<int:pk>/', ImageApiView.as_view()),
 ]
