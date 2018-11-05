@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 from .models import Image
-from .serializers import ImageInfoSerializer, ImageSerializer
+from .serializers import ImageInfoSerializer, ImageSerializer, VoteSerializer
 
 
 class ImageViewSet(viewsets.ModelViewSet):
@@ -18,7 +18,7 @@ class ImageViewSet(viewsets.ModelViewSet):
         # lookup user by their token and return True and the user
         # if token doesn't exist return False and None
         if self.request.META.get('HTTP_AUTHORIZATION'):
-            token_header = self.request.META.get('HTTP_AUTHORIZATION')
+            token_header = self.request.META.get('HTTP_AUTHORIZATION').split(' ')[1]
             try:
                 token = Token.objects.get(key=token_header)
             except (KeyError, Token.DoesNotExist):
@@ -72,6 +72,33 @@ class ImageApiView(APIView):
             image, data=request.data)
         if serializer.is_valid():
             serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors,
+                        status=status.HTTP_400_BAD_REQUEST)
+
+
+class VoteApiView(APIView):
+    """
+    Api endpoint for voting on images
+    """
+    def get_object(self, pk):
+        try:
+            return Image.objects.get(pk=pk)
+        except Image.DoesNotExist:
+            raise Http404
+
+    def put(self, request, pk):
+        image = self.get_object(pk)
+        serializer = VoteSerializer(
+            image, data=request.data)
+        if serializer.is_valid():
+            new_upvote = serializer.validated_data.get('upvote')
+            new_downvote = serializer.validated_data.get('downvote')
+            upvote = image.upvote + new_upvote
+            downvote = image.downvote + new_downvote
+            serializer.save(
+                upvote=upvote, downvote=downvote
+            )
             return Response(serializer.data)
         return Response(serializer.errors,
                         status=status.HTTP_400_BAD_REQUEST)
