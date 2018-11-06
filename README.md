@@ -1,1 +1,0 @@
-# photo_voting_api
