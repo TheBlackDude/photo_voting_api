@@ -32,6 +32,7 @@ class AccountManager(BaseUserManager):
 
         return account
 
+
 class Account(AbstractBaseUser):
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=40, unique=True)
@@ -57,6 +58,7 @@ class Account(AbstractBaseUser):
 
     def get_short_name(self):
         return self.first_name
+
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):

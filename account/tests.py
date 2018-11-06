@@ -55,7 +55,7 @@ class AccountModelTestCase(TestCase):
         self.assertFalse(self.get_token('test'))
 
         account = Account.objects.create_user(**user_details)
-        self.assertTrue(self.get_token('test')) # now token exist
+        self.assertTrue(self.get_token('test'))  # now token exist
         user = Token.objects.get(key=self.get_token('test')).user
         self.assertEqual(user.first_name, account.first_name)
 
@@ -94,7 +94,8 @@ class EndpointTestCase(APITestCase):
                         'first_name': 'Test', 'last_name': 'Test last'}
         response = self.client.post('/api/v1/accounts/', data=user_details, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data['message'], 'Account could not be created with received data.')
+        self.assertEqual(response.data['message'],
+                         'Account could not be created with received data.')
         # No accounts created
         self.assertEqual(Account.objects.count(), 0)
 

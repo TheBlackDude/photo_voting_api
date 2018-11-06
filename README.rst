@@ -7,6 +7,7 @@ Introduction
 
 Photo Voting is a simple API built with django restframework.
 It demonstrate how to build a Backend API with the following features:
+
 1. user registeration
 2. authenticating with tokens
 3. image endpoints
@@ -14,17 +15,18 @@ It demonstrate how to build a Backend API with the following features:
 5. unit testing APIs
 
 There is an `ionic <https://github.com/TheBlackDude/photo_voting_client/>`__ application to test it with.
-Go to the `repo <https://github.com/TheBlackDude/photo_voting_client/>` to see how to configure it.
+Go to the `repo <https://github.com/TheBlackDude/photo_voting_client/>`__ to see how to configure it.
 
 Setup
 =====
 
 No local setup should be needed apart from:
+
 - `docker <https://docs.docker.com/engine/installation/>`__
 - `docker-compose <https://docs.docker.com/compose/>`__
 
 
-creating a .env file with the following Environment variables.
+create a .env file with the following Environment variables.
 
 .. code:: bash
     DEBUG=whatever
@@ -34,6 +36,7 @@ creating a .env file with the following Environment variables.
     PG_NAME=whatever
     PG_HOST=whatever
     PG_PORT=5432 (default postgres port)
+
 
 The local dev setup uses **docker-compose** to spin up all necessary services.
 Make sure you have it installed and can connect to the **docker daemon**.
@@ -54,7 +57,7 @@ Type command below to run tests:
 
 .. code:: bash
 
-    docker-compose run voting manage createsuperuser
+    docker-compose run voting test
 
 Run the app
 ===========
