@@ -28,14 +28,13 @@ No local setup should be needed apart from:
 
 create a .env file with the following Environment variables.
 
-.. code:: bash
-    DEBUG=whatever
-    SECRET_KEY=whatever
-    PG_USERNAME=whatever
-    PG_PASSWORD=whatever
-    PG_NAME=whatever
-    PG_HOST=whatever
-    PG_PORT=5432 (default postgres port)
+- *DEBUG=whatever*
+- *SECRET_KEY=whatever*
+- *PG_USERNAME=whatever*
+- *PG_PASSWORD=whatever*
+- *PG_NAME=whatever*
+- *PG_HOST=whatever*
+- *PG_PORT=5432 (default postgres port)*
 
 
 The local dev setup uses **docker-compose** to spin up all necessary services.
